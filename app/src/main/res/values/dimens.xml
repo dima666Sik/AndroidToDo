@@ -2,4 +2,7 @@
 <resources>
     <dimen name="img_size">300dp</dimen>
     <dimen name="text_title_size">30sp</dimen>
+    <dimen name="margin10">10dp</dimen>
+    <dimen name="height_check40">40dp</dimen>
+    <dimen name="textSize">14sp</dimen>
 </resources>
