@@ -95,7 +95,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
         return toDoModelList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textViewDate;
         CheckBox checkBox;
 
@@ -103,7 +103,6 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
             super(itemView);
             textViewDate = itemView.findViewById(R.id.idDueDate);
             checkBox = itemView.findViewById(R.id.checkbox);
-
         }
     }
 }

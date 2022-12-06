@@ -47,13 +47,14 @@ public class BaseActivity extends AppCompatActivity implements OnDialogCloseList
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(BaseActivity.this));
 
-        floatingActionButton.setOnClickListener(v -> {
+        floatingActionButton.setOnClickListener(v -> { // call BottomSheetDialogFragment for create a new task
             AddNewTask.newInstance().show(getSupportFragmentManager(), AddNewTask.TAG);
         });
+
         list = new ArrayList<>();
         adapter = new ToDoAdapter(list, this);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchHelper((adapter)));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TouchHelper((adapter))); // control swipe (left-right)
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         recyclerView.setAdapter(adapter);

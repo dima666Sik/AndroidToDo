@@ -118,7 +118,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
         buttonSave.setOnClickListener(v -> {
             String task = editTextTask.getText().toString();
 
-            if (finalIsUpdate) {
+            if (finalIsUpdate) { // for edit task
                 firestore.collection("task")
                         .document(id)
                         .update("task",task
@@ -127,7 +127,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
             } else {
                 if (task.isEmpty()) {
                     Toast.makeText(context, "Empty task not allowed!", Toast.LENGTH_SHORT).show();
-                } else {
+                } else { // for new task
                     Map<String, Object> taskMap = new HashMap<>();
                     taskMap.put("task", task);
                     taskMap.put("date", date);
