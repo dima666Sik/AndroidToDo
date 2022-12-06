@@ -6,21 +6,21 @@
 
 ## Features
 ☑️ You can create your tasks;
-☑️ You can edit, delete your tasks;
-☑️ You can marked your task as executed.
+<br>☑️ You can edit, delete your tasks;
+<br>☑️ You can marked your task as executed.
 
 ## Launch guide
 To run this project you will need to install this project in phone with Android Operating System.
 
 ## Program testing
-<i><b>Start work program. You can see for 2 seconds this activity.</b></i><br>
+### Start work program. You can see for 2 seconds this activity.
 ![Start program](app/src/main/res/img_for_git/start_activity.jpg)
-<br><i><b>Main Activity</b></i><br>
+### Main Activity
 ![Main Activity](app/src/main/res/img_for_git/main_activity.jpg)
-<br><i><b>Create Task</b></i><br>
+### Create Task
 ![Create Task](app/src/main/res/img_for_git/create_task.jpg)
-<br><i><b>Edit Task</b></i><br>
+### Edit Task
 ![Edit Task](app/src/main/res/img_for_git/edit_task.jpg)
-<br><i><b>Delete Task</b></i><br>
+### Delete Task
 ![Delete Task](app/src/main/res/img_for_git/delete_task.jpg)
 
