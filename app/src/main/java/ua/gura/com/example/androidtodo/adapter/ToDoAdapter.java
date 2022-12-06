@@ -1,5 +1,7 @@
 package ua.gura.com.example.androidtodo.adapter;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
+import ua.gura.com.example.androidtodo.AddNewTask;
 import ua.gura.com.example.androidtodo.BaseActivity;
 import ua.gura.com.example.androidtodo.R;
 import ua.gura.com.example.androidtodo.model.ToDoModel;
@@ -23,6 +26,29 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.MyViewHolder> 
     private List<ToDoModel> toDoModelList;
     private BaseActivity activity;
     private FirebaseFirestore firestore;
+
+    public Context getContext() {
+        return activity;
+    }
+
+    public void deleteTask(int position){
+        ToDoModel toDoModel = toDoModelList.get(position);
+        firestore.collection("task").document(toDoModel.TaskId).delete();
+        toDoModelList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void editTask(int position){
+        ToDoModel toDoModel = toDoModelList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putString("task", toDoModel.getTask());
+        bundle.putString("date",toDoModel.getDate());
+        bundle.putString("id",toDoModel.TaskId);
+
+        AddNewTask addNewTask = new AddNewTask();
+        addNewTask.setArguments(bundle);
+        addNewTask.show(activity.getSupportFragmentManager(),addNewTask.getTag());
+    }
 
     public ToDoAdapter(List<ToDoModel> toDoModelList, BaseActivity activity) {
         this.toDoModelList = toDoModelList;

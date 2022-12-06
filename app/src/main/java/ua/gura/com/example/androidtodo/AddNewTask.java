@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -35,6 +36,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
     private FirebaseFirestore firestore;
     private Context context;
     private String date = new String();
+    private String id = new String();
+    private String dateUpdate = new String();
 
     public static AddNewTask newInstance() {
         return new AddNewTask();
@@ -55,6 +58,21 @@ public class AddNewTask extends BottomSheetDialogFragment {
         buttonSave = view.findViewById(R.id.buttonSave);
 
         firestore = FirebaseFirestore.getInstance();
+
+        boolean isUpdate = false;
+        final Bundle bundle = getArguments();
+        if (bundle != null) {
+            isUpdate = true;
+            String task = bundle.getString("task");
+            id = bundle.getString("id");
+            dateUpdate = bundle.getString("date");
+            editTextTask.setText(task);
+            textViewDate.setText(dateUpdate);
+            if (task.length() > 0) {
+                buttonSave.setEnabled(false);
+                buttonSave.setBackgroundColor(Color.GRAY);
+            }
+        }
         editTextTask.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -95,27 +113,39 @@ public class AddNewTask extends BottomSheetDialogFragment {
             }, YEAR, MONTH, DAY);
             datePickerDialog.show();
         });
+
+        boolean finalIsUpdate = isUpdate;
         buttonSave.setOnClickListener(v -> {
             String task = editTextTask.getText().toString();
-            if (task.isEmpty()) {
-                Toast.makeText(context, "Empty task not allowed!", Toast.LENGTH_SHORT).show();
-            } else {
-                Map<String, Object> taskMap = new HashMap<>();
-                taskMap.put("task", task);
-                taskMap.put("date", date);
-                taskMap.put("status", 0);
 
+            if (finalIsUpdate) {
                 firestore.collection("task")
-                        .add(taskMap)
-                        .addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                Toast.makeText(context, "Task saved!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(context, task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        .document(id)
+                        .update("task",task
+                                ,"date",date);
+                Toast.makeText(context, "Task updated", Toast.LENGTH_SHORT).show();
+            } else {
+                if (task.isEmpty()) {
+                    Toast.makeText(context, "Empty task not allowed!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Map<String, Object> taskMap = new HashMap<>();
+                    taskMap.put("task", task);
+                    taskMap.put("date", date);
+                    taskMap.put("status", 0);
+                    taskMap.put("time", FieldValue.serverTimestamp());
 
-                            }
-                        }).addOnFailureListener(e -> Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                    firestore.collection("task")
+                            .add(taskMap)
+                            .addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Toast.makeText(context, "Task saved!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                }
+                            }).addOnFailureListener(e -> Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
+                }
             }
             dismiss();
         });
@@ -124,15 +154,15 @@ public class AddNewTask extends BottomSheetDialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context=context;
+        this.context = context;
     }
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         Activity activity = getActivity();
-        if (activity instanceof  OnDialogCloseListener){
-            ((OnDialogCloseListener)activity).onDialogClose(dialog);
+        if (activity instanceof OnDialogCloseListener) {
+            ((OnDialogCloseListener) activity).onDialogClose(dialog);
         }
     }
 }
